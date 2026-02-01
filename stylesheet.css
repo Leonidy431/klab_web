@@ -1,0 +1,230 @@
+a
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:10px;
+	color:#969393;
+}
+p
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	color:#969393;
+}
+li
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	color:#969393;
+}
+h1
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	color:#969393;
+}
+BODY
+{
+	background-color: #ffffff;
+}
+.menutop
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:15px;
+	font-weight:normal;
+	text-decoration:none;
+	padding-right:10px;
+	padding-left:10px;
+	border-right: 1px solid #dbddde;
+	color:#969393;
+	background-image: url("shade.gif"/*tpa=http://k-laboratory.com/image/shade.gif*/);
+}
+.menutop:hover
+{
+	color:#ffb200;
+}
+.menutopactive
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:15px;
+	font-weight:normal;
+	text-decoration:underline;
+	padding-right:10px;
+	padding-left:10px;
+	border-right: 1px solid #dbddde;
+	color:#ffb200;
+	background-image: url("shade.gif"/*tpa=http://k-laboratory.com/image/shade.gif*/);
+}
+.menuleft
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	text-decoration:none;
+	padding-right:10px;
+	padding-left:10px;
+	border-right:none;
+	color:#969393;
+}
+.menuleft:hover
+{
+	color:#ffb200;
+}
+.menuleftactive
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	text-decoration:underline;
+	padding-right:10px;
+	padding-left:10px;
+	border-right:none;
+	color:#ffb200;
+}
+.footer
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:10px;
+	font-weight:normal;
+	text-decoration:none;
+	padding-right:10px;
+	padding-left:10px;
+	border-right: 1px solid #dbddde;
+	color:#969393;
+}
+.footercopyright
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:10px;
+	font-weight:normal;
+	text-decoration:none;
+	padding-right:10px;
+	padding-left:10px;
+	border-left: 1px solid #dbddde;
+	color:#969393;
+}
+.footer:hover
+{
+	color:#ffb200;
+}
+.footeractive
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:10px;
+	font-weight:normal;
+	text-decoration:underline;
+	padding-right:10px;
+	padding-left:10px;
+	border-right:1px solid #dbddde;
+	color:#ffb200;
+}
+.content
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	text-decoration:none;
+	color:#969393;
+}
+.content:hover
+{
+	color:#ffb200;
+}
+.gallery
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	text-decoration:none;
+	padding-right:10px;
+	padding-left:10px;
+	border-right: 1px solid #dbddde;
+	color:#969393;
+	background-image: url("shade.gif"/*tpa=http://k-laboratory.com/image/shade.gif*/);
+}
+.gallery:hover
+{
+	color:#ffb200;
+}
+.galleryactive
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	text-decoration:underline;
+	padding-right:10px;
+	padding-left:10px;
+	border-right:1px solid #dbddde;
+	color:#ffb200;
+}
+.gallerynull
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	text-decoration:none;
+	padding-right:10px;
+	padding-left:10px;
+	border-right: 1px solid #dbddde;
+	color:#969393;
+	background-image: url("shade.gif"/*tpa=http://k-laboratory.com/image/shade.gif*/);
+}
+.gallerycontent
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	text-decoration:none;
+	color:#969393;
+}
+.gallerycontent:hover
+{
+	background-color:#F7F7F4;
+}
+.e-mail
+{
+	font-family:verdana, arial, helvetica, sans-serif;
+	font-size:11px;
+	color: #969393;
+}
+.e-mail:hover
+{
+	color:#666699;
+}
+.headerbackground
+{
+	background-color:#ffffff;
+	border-top: 1px solid #dbddde;
+	border-bottom: 1px solid #dbddde;
+}
+.menutopbackground
+{
+	background-color:#ffffff;
+	border-bottom: 1px solid #dbddde;
+}
+.menuleftbackground
+{
+	background-color:#ffffff;
+}
+.menurightbackground
+{
+	background-color:#ffffff;
+}
+.contentbackground
+{
+	background-color:#ffffff;
+}
+.footerbackground
+{
+	background-color:#ffffff;
+	border-top: 1px solid #dbddde;
+	border-bottom: 1px solid #dbddde;
+}
+.gallerybackground
+{
+	background-color:#ffffff;
+	border-top: 1px solid #dbddde;
+	border-bottom: 1px solid #dbddde;
+}
+
+
+
