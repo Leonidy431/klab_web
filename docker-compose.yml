@@ -1,0 +1,173 @@
+# K-Laboratory Platform - Docker Compose
+# Full stack deployment with all services
+
+version: "3.9"
+
+services:
+  # ==================== Application ====================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: klab-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://klab:${DB_PASSWORD:-klab_secret}@postgres:5432/klab
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-change-jwt-secret}
+      - BLUEOS_HOST=${BLUEOS_HOST:-192.168.2.2}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY:-}
+      - DEBUG=${DEBUG:-false}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - klab-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==================== Database ====================
+  postgres:
+    image: postgres:16-alpine
+    container_name: klab-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=klab
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-klab_secret}
+      - POSTGRES_DB=klab
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - klab-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U klab -d klab"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== Cache & Sessions ====================
+  redis:
+    image: redis:7-alpine
+    container_name: klab-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - klab-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== Background Tasks ====================
+  celery-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: klab-celery-worker
+    restart: unless-stopped
+    command: celery -A app.core.celery worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://klab:${DB_PASSWORD:-klab_secret}@postgres:5432/klab
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - klab-network
+
+  celery-beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: klab-celery-beat
+    restart: unless-stopped
+    command: celery -A app.core.celery beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://klab:${DB_PASSWORD:-klab_secret}@postgres:5432/klab
+      - CELERY_BROKER_URL=redis://redis:6379/1
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - klab-network
+
+  # ==================== Web Server / Reverse Proxy ====================
+  nginx:
+    image: nginx:alpine
+    container_name: klab-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - .:/var/www/html:ro
+    depends_on:
+      - backend
+    networks:
+      - klab-network
+
+  # ==================== Monitoring (Optional) ====================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: klab-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - klab-network
+    profiles:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: klab-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - klab-network
+    profiles:
+      - monitoring
+
+# ==================== Networks ====================
+networks:
+  klab-network:
+    driver: bridge
+
+# ==================== Volumes ====================
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
